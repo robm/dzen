@@ -1,0 +1,25 @@
+==================================
+ dzen, (c) 2007 by Robert Manea
+==================================
+
+
+Edit config.mk to match your local setup (dzen is installed into
+the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install dzen (if
+necessary as root):
+
+    make clean install
+
+
+Optionally if you want to use dzen's gadgets:
+
+    cd gadgets
+    make clean install
+
+
+Note:       By default dzen will not be compiled with Xinerama and XPM support.
+            Uncomment the respective lines in config.mk to change this.
+
+
+Use "./help" to view a nicely formated version of the documentation.

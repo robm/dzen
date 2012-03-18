@@ -1,0 +1,29 @@
+==================================
+  dzen, (c) 2007 by Robert Manea
+==================================
+
+
+The following people have contributed especially to dzen:
+
+
+Cyrille Bagard <nocbos at gmail dot com>
+  * patch allowing to use EWMH for docking dzen.
+
+Jason Creighton <jcreigh at gmail dot com>
+  * XINERAMA support
+  * _NET_WM_STRUT_PARTIAL support
+
+Adam Langley <agl at imperialviolet dot org>
+  * patch to add optional timeout to '-p'
+
+Mauke <mauke at ...>
+  * Code clean ups to remove compiler warnings
+
+Alexander V. Inyukhin <shurick at sectorb dot msk dot ru>
+  * fix to action handling
+
+Valery V. Vorotyntsev <valery dot vv at gmail.com>
+  * patch to correctly handle the -geometry and -y options for
+    dzen at the bottom of the screen
+  * cosmetic code clean ups
+

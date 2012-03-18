@@ -1,0 +1,591 @@
+^fg(lightgreen)^r(190x4)^fg(#6fbf47)^r(38x4)^fg(darkgreen)^r(9x4)
+^fg(#6fbf47)  dzen, (c) 2007 by Robert Manea
+^fg(darkgreen)^r(9x4)^fg(#6fbf47)^r(38x4)^fg(lightgreen)^r(190x4)
+
+A general purpose messaging, notification and menu program
+
+
+The "gadgets" subdirectory contains some tools that you can 
+use in combination with dzen.
+
+Script archive with a collection of interesting ideas:
+^fg(lightblue)  http://gotmor.googlepages.com/dzenscriptarchive
+
+
+
+^fg(#6fbf47)Features
+^fg(#6fbf47)--------
+
+    ^co(4x4) scriptable in any language
+
+    ^co(4x4) dynamic colorizer
+
+    ^co(4x4) icons support
+
+    ^co(4x4) keyboard support
+
+    ^co(4x4) single line and/or windows holding multiple lines
+
+    ^co(4x4) menu functionality
+
+    ^co(4x4) in-text formating language
+
+    ^co(4x4) flexible event/action mechanism
+
+    ^co(4x4) hideable, collapsable
+
+    ^co(4x4) Xinerama support
+
+
+^fg(#6fbf47)Requirements
+^fg(#6fbf47)------------
+In order to build dzen you need the Xlib header files.
+
+
+^fg(#6fbf47)Installation
+^fg(#6fbf47)------------
+Edit config.mk to match your local setup (dzen is installed into
+the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install dzen (if
+necessary as root):
+
+    ^fg(grey85)make clean install
+
+
+Optionally if you want to use dzen's gadgets:
+
+    ^fg(grey85)cd gadgets
+    ^fg(grey85)make clean install
+
+
+^fg(Khaki)Note:       By default dzen will ^fg(red)not^fg(Khaki) be compiled with Xinerama and XPM support.
+            ^fg(Khaki)Uncomment the respective lines in config.mk to change this.
+
+
+^fg(#6fbf47)Contact:
+^fg(#6fbf47)--------
+Feature requests, patches or anything else related to dzen can be send
+to: ^fg(Khaki)rob dot manea at gmail dot com
+
+
+^fg(#6fbf47)Running dzen
+^fg(#6fbf47)------------
+dzen accepts a couple of options:
+
+    -fg     foreground color
+    -bg     background color
+    -fn     font 
+    -ta     alignement of title window content 
+            l(eft), c(center), r(ight)
+    -tw     title window width
+    -sa     alignment of slave window, see "-ta"
+    -l      lines,  ^fg(#6fbf47)see (1)
+    -e      events and actions, ^fg(#6fbf47)see (2)
+    -m      menu mode, ^fg(#6fbf47)see (3)
+    -u      update contents of title and 
+            slave window simultaneously, ^fg(#6fbf47)see (4)
+    -p      persist EOF (optional timeout in seconds)
+    -x      x position
+    -y      y position
+    -h      line height (default: fontheight + 2 pixels)
+    -w      width
+    -xs     number of Xinerama screen
+    -v      version information
+
+    ^fg(#6fbf47)see (5)^fg(), for the in-text formating language.
+
+
+
+^fg(#6fbf47)X resources
+^fg(#6fbf47)-----------
+
+Dzen is able to read font and color setting from X resources.
+As an example you can add following lines to ~/.Xresources
+
+^fg(Khaki)dzen2.font:       -*-fixed-*-*-*-*-*-*-*-*-*-*-*-*
+^fg(Khaki)dzen2.foreground: #22EE11
+^fg(Khaki)dzen2.background: black
+
+
+
+^fg(#6fbf47)Window layout
+^fg(#6fbf47)-------------
+
+Dzen's window layout is as follows:
+
+^fg(red)     ------------------------------------------
+^fg(red)    |        Title window, single line         |
+^fg(red)    `------------------------------------------´
+^fg(#6fbf47)    |                                          |
+^fg(#6fbf47)    |               scrollable                 |
+^fg(#6fbf47)    |              Slave window                |
+^fg(#6fbf47)    |             multiple lines               |
+^fg(#6fbf47)    |     lines to display simultaneously      |
+^fg(#6fbf47)    |           controlled with the            |
+^fg(#6fbf47)    |              '-l' option                 |
+^fg(#6fbf47)    |                                          |
+^fg(#6fbf47)    |                                          |
+^fg(#6fbf47)    `------------------------------------------´
+
+The first line you provide to dzen always goes to the title window, 
+all other consecutive lines will be drawn to the slave window unless
+you explicitly overide this with the ^fg(#6fbf47)(5) In-text formating language
+^fg()command ^^tw().
+
+
+^fg(#6fbf47)QA:
+^fg(#6fbf47)---
+
+Q1:  I don't want a slave window, what to do?
+
+A1:  Do not provide the '-l' option, all lines will be displayed
+     in the title window, this is the default behaviour.
+
+
+Q2:  I used the '-l' option but no slave window appears.
+
+A2:  With the default event/action handling the slave window will
+     only be displayed if you hoover with the mouse over the title
+     window. See ^fg(#6fbf47)(2) Events and actions ^fg()if you'd like to change
+     this.
+
+
+Q3:  If I echo some text or cat a file dzen closes itself imediatelly.
+
+A3:  There are 2 different approaches dzen uses to terminate itself, 
+     see next section ^fg(#6fbf47)Termination^fg().
+
+
+Q4:  Ok, the title and slave thing works, can I update the
+     contents of both windows at the same time?
+
+A4:  Sure, see ^fg(#6fbf47)(4) Simultaneous updates ^fg()or use the in-text 
+     command ^^tw() to explicitly draw to the title windwow.
+     See ^fg(#6fbf47)(5) In-Text formating language ^fg()for further details
+
+Q5:  Can i chnage color of my input at runtime?
+
+A5:  Yes, you can change both background and foreground colors and 
+     much more See ^fg(#6fbf47)(5) In-Text formating language^fg().
+
+
+Q6:  Can I use dzen as a menu?
+
+A6:  Yes, both vertical and horizontal menus are supported. 
+     See ^fg(#6fbf47)(3) Menu ^fg()for further details.
+
+
+
+
+^fg(#6fbf47)Termination:
+^fg(#6fbf47)------------
+dzen uses two different approaches to terminate itself:
+
+    ^co(4x4) Timed termination: if EOF is received -> terminate
+        - unless the '-p' option is set
+            · '-p' without argument persist forever
+            · '-p' with argument n  persist for n seconds
+
+    ^co(4x4) Interactive termination: if mouse button3 is clicked -> terminate
+        - this is the default behaviour, ^fg(#6fbf47)see (2)
+        - in some modes the Escape key terminates too, ^fg(#6fbf47)see (2)
+
+
+
+^fg(#6fbf47)Return values:
+^fg(#6fbf47)--------------
+0               -   dzen received EOF
+1               -   some error occured, inspect the error message
+user defined    -   set with 'exit:retval' action, ^fg(#6fbf47)see (2)
+
+
+
+^fg(#6fbf47)(1) Option "-l": Slave window
+^fg(#6fbf47)--------------------------------
+
+Enables support for displaying multiple lines. The parameter to "-l"
+specifies the number of lines to be displayed.
+
+These lines of input are held in the slave window which becomes active as soon
+as the pointer enters the title (default action) window.
+
+If the mouse leaves the slave window it will be hidden unless it is set
+sticky by clicking with Button2 into it (default action).
+
+Button4 and Button5 (mouse wheel) will scroll the slave window up
+and down if the content exceeds the window height (default action).
+
+
+
+^fg(#6fbf47)(2) Option '-e': Events and actions
+^fg(#6fbf47)-----------------------------------
+
+dzen allows the user to associate actions to events.
+
+The command line syntax is as follows:
+-e 'event1=action1:option1:...option<n>,...,action<m>;...;event<l>'
+
+Every event can take any number of actions and every action can take any number
+of options. (By default limited to 64 each, easily changable in action.h)
+
+An example:
+^fg(grey70)    -e 'button1=exec:xterm:firefox;entertitle=uncollapse,unhide;button3=exit'
+
+    Meaning:
+
+    ^fg(grey70)button1=exec:xterm:firefox;
+    on Button1 event (Button1 press on the mouse) execute xterm and
+    firefox. 
+    ^fg(Khaki)Note: xterm and firefox are options to the exec action
+
+    ^fg(grey70)entertitle=uncollapse,unhide;
+    on entertitle (mouse pointer enters the title window) uncollapse
+    slave window and unhide the title window
+
+    ^fg(grey70)button3=exit
+    on button3 event exit dzen
+
+
+^fg(#6fbf47)Supported events:
+^fg(#6fbf47)-----------------
+
+    onstart             Perform actions right after startup
+    onexit              Perform actions just before exiting
+    onnewinput          Perform actions if there is new input for the slave window
+    button1             Mouse button1 released 
+    button2             Mouse button2 released
+    button3             Mouse button3 released
+    button4             Mouse button4 released (usually scrollwheel)
+    button5             Mouse button5 released (usually scrollwheel)
+    button6             Mouse button6 released
+    button7             Mouse button7 released
+    entertitle          Mouse enters the title window
+    leavetitle          Mouse leaves the title window
+    enterslave          Mouse enters the slave window
+    leaveslave          Mouse leaves the slave window
+    sigusr1             SIGUSR1 received 
+    sigusr2             SIGUSR2 received
+    key_KEYNAME         Keyboard events (*)
+
+
+    ^fg(#6fbf47)(*) Keyboard events:
+    ^fg(#6fbf47)--------------------
+
+    Every key can be bound to an action (see below). The format is:
+    key_KEYNAME where KEYNAME is the name of the key as defined in
+    keysymdef.h (usually: /usr/include/X11/keysymdef.h).  The part 
+    after 'XK_' in keysymdef.h must be used for KEYNAME.
+
+
+
+^fg(#6fbf47)Supported actions:
+^fg(#6fbf47)------------------
+
+    exec:command1:..:n  execute all given options
+    menuexec            executes selected menu entry
+    exit:retval         exit dzen and return 'retval'
+    print:str1:...:n    write all given options to STDOUT
+    menuprint           write selected menu entry to STDOUT
+    collapse            collapse (roll-up) slave window
+    uncollapse          uncollapse (roll-down) slave window
+    togglecollapse      toggle collapsed state
+    stick               stick slave window
+    unstick             unstick slave window
+    togglestick         toggle sticky state
+    hide                hide title window
+    unhide              unhide title window
+    togglehide          toggle hide state
+    raise               raise window to view (above all others)
+    lower               lower window (behind all others)
+    scrollhome          show head of input
+    scrollend           show tail of input
+    scrollup:n          scroll slave window n lines up   (default n=1)
+    scrolldown:n        scroll slave window n lines down (default n=1)
+    grabkeys            enable keyboard support
+    ungrabkeys          disable keyboard support
+    grabmouse           enable mouse support 
+                        only needed with specific windowmanagers, such as fluxbox
+    ungrabmouse         release mouse 
+                        only needed with specific windowmanagers, such as fluxbox
+
+
+^fg(Khaki)Note:   If no events/actions are specified dzen defaults to:
+
+        ^fg(#6fbf47)Title only mode:
+        ^fg(#6fbf47)----------------
+
+        -e 'button3=exit:13'
+
+
+        ^fg(#6fbf47)Multiple lines and vertical menu mode:
+        ^fg(#6fbf47)--------------------------------------
+
+        -e 'entertitle=uncollapse,grabkeys;
+            enterslave=grabkeys;leaveslave=collapse,ungrabkeys;
+            button1=menuexec;button2=togglestick;button3=exit:13;
+            button4=scrollup;button5=scrolldown;
+            key_Escape=ungrabkeys,exit'
+
+
+        ^fg(#6fbf47)Horizontal menu mode:
+        ^fg(#6fbf47)---------------------
+
+        -e 'enterslave=grabkeys;leaveslave=ungrabkeys;
+            button4=scrollup;button5=scrolldown;
+            key_Left=scrollup;key_Right=scrolldown;
+            button1=menuexec;button3=exit:13
+            key_Escape=ungrabkeys,exit'
+
+
+        ^fg(Khaki)If you define any events/actions, there is no default behaviour,
+        ^fg(Khaki)i.e. you will have to specify _all_ events/actions you want to
+        ^fg(Khaki)use.
+
+
+
+^fg(#6fbf47)(3) Option '-m', Menu
+^fg(#6fbf47)---------------------
+
+Dzen provides two menu modes, vertical and horizontal menus. You can
+access these modes by adding 'v'(ertical) or 'h'(orizontal) to the 
+'-m' option. If nothing is specified dzen defaults to vertical menus.
+
+Vertical menu, both invocations are equivalent:
+    ^fg(grey70)dzen2 -p -l 4 -m < file
+    ^fg(grey70)dzen2 -p -l 4 -m v < file
+
+Horizontal menu:
+    ^fg(grey70)dzen2 -p -l 4 -m h < file
+
+
+All actions beginning with "menu" work on the selected menu entry.
+
+^fg(Khaki)Note:   Menu mode only makes sense if '-l <n>' is specified!
+
+        ^fg(Khaki)Horizontal menus have no title window, so all actions
+        ^fg(Khaki)affecting the title window will be silently discarded
+        ^fg(Khaki)in this mode.
+
+
+
+^fg(#6fbf47)(4) Option '-u', Simultaneous updates
+^fg(#6fbf47)-------------------------------------
+
+This option provides facilities to update the title and slave window at
+the same time.
+
+The way it works is best described by an example:
+
+  Motivation:
+
+  We want to display an updating clock in the title and some log
+  output in the slave window.
+
+  Solution:
+
+  ^fg(grey70)while true; do
+        ^fg(grey70)date                # output goes to the title window
+        ^fg(grey70)dmesg | tail -n 10  # output goes to the slave window
+        ^fg(grey70)sleep 1
+  ^fg(grey70)done | dzen2 -l 10 -u
+
+For this to work correctly it is essential to provide exactly the number
+of lines to the slave window as defined by the parameter to '-l'.
+
+
+
+^fg(#6fbf47)(5) In-text formating language:
+^fg(#6fbf47)-------------------------------
+
+This feature allows to dynamically (at runtime) format the text dzen
+displays.
+
+Currently the following commands are supported:
+
+
+Colors:
+-------
+
+    ^^fg(color)         set foreground color
+    ^^fg()              without arguments, sets default fg color
+    ^^bg(color)         set background color
+    ^^bg()              without arguments, sets default bg color
+
+Graphics:
+---------
+
+    ^^i(path)           draw icon specified by path
+                       Supported formats: XBM and optionally XPM
+
+    ^^r(WIDTHxHEIGHT)   draw a rectangle with the dimensions 
+                       WIDTH and HEIGHT
+    ^^ro(WIDTHxHEIGHT)  rectangle outline
+
+    ^^c(RADIUS)         draw a circle with size RADIUS pixels
+    ^^co(RADIUS)        circle outline
+
+Positioning:
+------------
+
+    ^^p(PIXEL)          position next input amount of PIXELs to the right
+                       or left of the current position
+                       a.k.a. relative positioning
+
+    ^^pa(PIXEL)         position next input at PIXEL
+                       a.k.a. absolute positioning
+                       For maximum predictability ^^pa() should only be
+                       used with '-ta l' or '-sa l'
+Other:
+------
+
+    ^^tw()              draw to title window
+                       This command has some annoyances, as only 
+                       the input after the command will be drawn
+                       to the title window, so it is best used 
+                       only once and as first command per line
+                       Subject to be improved in the future.
+
+    ^^cs()              clear slave window
+                       This command must be the first and only command
+                       per line.
+
+    ^^ib(VALUE)         ignore background setting, VALUE can be either
+                       1 to ignore or 0 to not ignore the bg color set
+                       with ^^bg(color)
+                       This command is useful in combination with ^^pa()
+                       in order to position the input inside other already
+                       drawn input.
+
+                       Example: 
+                         ^^ib(1)^^fg(red)^^ro(100x15)^^p(-98)^^fg(blue)^^r(20x10)^^fg(orange)^^p(3)^^r(40x10)^^p(4)^^fg(darkgreen)^^co(12)^^p(2)^^c(10)
+                       Giving:
+                         ^ib(1)^fg(red)^ro(100x15)^p(-98)^fg(blue)^r(20x10)^fg(orange)^p(3)^r(40x10)^p(4)^fg(darkgreen)^co(12)^p(2)^c(10)
+
+
+
+These commands can appear anywhere and in any combination in dzen's
+input. 
+
+The color can be specified either as symbolic name (e.g. red,
+darkgreen, etc.) or as #rrggbb hex-value (e.g. #ffffaa).
+
+Icons must be in the XBM or optionally XPM format, see the "bitmaps"
+directory for some sample icons. With the standard "bitmap" application
+you can easily draw your own icons.
+
+^fg(Khaki)Note:   Displaying XPM (pixmap) files imposes a somewhat
+        ^fg(Khaki)higher load than lightweight XBM files, so use
+        ^fg(Khaki)them with care in tight loops.
+
+
+Doubling the '^^' character removes the special meaning from it.
+
+
+Some examples:
+
+   Input:  
+          ^^fg(red)I'm red text ^^fg(blue)I am blue
+
+   Resulting in: 
+          ^fg(red)I'm red text ^fg(blue)I am blue
+
+
+   Input:
+          ^^bg(#ffaaaa)The ^^fg(yellow)text to ^^bg(blue)^^fg(orange)colorize
+
+   Resulting in:
+          ^bg(#ffaaaa)The ^fg(yellow)text to ^bg(blue)^fg(orange)colorize
+
+
+   Input:
+          ^^fg(white)Some text containing ^^^^ characters
+
+   Resulting in:
+          ^fg(white)Some text containing ^^ characters
+
+
+   Input for icons:
+          ^^i(bitmaps/envelope.xbm) I am an envelope ^^fg(yellow)and ^^i(bitmaps/battery.xbm) I'm a baterry.
+
+   Resulting in:
+          ^i(bitmaps/envelope.xbm) I am an envelope ^fg(yellow)and ^i(bitmaps/battery.xbm) I'm a baterry.
+
+
+   Input for rectangles:
+          6x4 rectangle ^^r(6x4) ^^fg(red)12x8 ^^r(12x8) ^^fg(yellow)and finally 100x15 ^^r(100x15)
+
+   Resulting in:
+          6x4 rectangle ^r(6x4) ^fg(red)12x8 ^r(12x8) ^fg(yellow)and finally 100x15 ^r(100x15)
+
+
+   Input for relative positioning:
+          Some text^^p(100)^^fg(yellow)100 pixels to the right^^p(50)^^fg(red)50 more pixels to the right
+
+   Resulting in:
+          Some text^p(100)^fg(yellow)100 pixels to the right^p(50)^fg(red)50 more pixels to the right
+
+
+
+
+
+^fg(#6fbf47)Examples:
+^fg(#6fbf47)---------
+
+^co(4x4) Display message and timeout after 10 seconds:
+^fg(grey85)    (echo "This is a message"; sleep 10) | dzen2 -bg darkred -fg grey85 -fn fixed 
+
+
+^co(4x4) Display message and never timeout:
+^fg(grey85)    echo "This is a message"| dzen2 -p
+
+
+^co(4x4) Display updating single line message:
+^fg(grey85)    for i in $(seq 1 20); do A=${A}'='; print $A; sleep 1; done | dzen2
+
+
+^co(4x4) Display header and a message with multiple lines:
+^fg(grey85)    (echo Header; cal; sleep 20) | dzen2 -l 8
+
+    Displays "Header" in the title window and the output of cal in the
+    8 lines high slave window.
+
+
+^co(4x4) Display updating messages:
+^fg(grey85)    (echo Header; while true; do echo test$((i++)); sleep 1; done) | dzen2 -l 12
+
+    The slave window will update contents if new input has arrived.
+
+
+^co(4x4) Display log files:
+^fg(grey85)    (su -c "echo LOGFILENAME; tail -f /var/log/messages") | dzen2 -l 20 -x 100 -y 300 -w 500
+
+
+^co(4x4) Monthly schedule with remind:
+^fg(grey85)    (echo Monthly Schedule; remind -c1 -m) | dzen2 -l 52 -w 410 -p -fn lime -bg '#e0e8ea' -fg black -x 635
+
+
+^co(4x4) Simple menu:
+^fg(grey85)    echo "Applications" | dzen2 -l 4 -p -m < menufile
+
+
+^co(4x4) Horizontal menu without any files:
+^fg(grey85)    {echo Menu; echo -e "xterm\nxclock\nxeyes\nxfontsel"} | dzen2 -l 4 -m h -p
+
+
+^co(4x4) Extract PIDs from the process table:
+
+^fg(grey85)    {echo Procs; ps -a} | dzen2 -m -l 12 -p \
+^fg(grey85)    -e 'button1=menuprint;button3=exit;button4=scrollup:3;button5=scrolldown:3;entertitle=uncollapse;leaveslave=collapse' \
+^fg(grey85)            | awk '{print $1}'
+
+
+^co(4x4) Dzen as xmonad (see http://xmonad.org) statusbar:
+
+^fg(grey85)    status.sh | dzen2 -ta r -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-iso8859' -bg '#aecf96' -fg black \
+^fg(grey85)        -p -e 'sigusr1=raise;sigusr2=lower;onquit=exec:rm /tmp/dzen2-pid;button3=exit' & echo $! > /tmp/dzen2-pid
+
+
+
+
+Have fun.
