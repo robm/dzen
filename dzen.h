@@ -68,7 +68,8 @@ typedef struct _CLICK_A {
 	int end_x;
 	int start_y;
 	int end_y;
-    int window;
+    int topslave;
+	Window win;		//(line)window to which the action is attached
 	char cmd[1024];
 } click_a;
 extern click_a sens_areas[MAX_CLICKABLE_AREAS];
