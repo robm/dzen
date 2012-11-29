@@ -19,6 +19,7 @@
 #define MAX_ICON_CACHE 32
 
 #define MAX(a,b) ((a)>(b)?(a):(b))
+#define LNR2WINDOW(lnr) lnr==-1?0:1
 
 typedef struct ICON_C {
 	char name[ARGLEN];
@@ -30,7 +31,7 @@ typedef struct ICON_C {
 icon_c icons[MAX_ICON_CACHE];
 int icon_cnt;
 int otx;
-int xorig=0;
+int xorig[2]; //0: topwindow, 1: slave window
 
 /* command types for the in-text parser */
 enum ctype  {bg, fg, icon, rect, recto, circle, circleo, pos, abspos, titlewin, ibg, fn, fixpos, ca, ba};
@@ -419,8 +420,7 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 	else {
 		h = dzen.font.height;
 		py = (dzen.line_height - h) / 2;
-		xorig = 0;
-
+        xorig[LNR2WINDOW(lnr)] = 0;
 
 		if(lnr != -1) {
 			pm = XCreatePixmap(dzen.dpy, RootWindow(dzen.dpy, DefaultScreen(dzen.dpy)), dzen.slave_win.width,
@@ -484,7 +484,7 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 
 		if( lnr != -1 && (lnr + dzen.slave_win.first_line_vis >= dzen.slave_win.tcnt)) {
 			XCopyArea(dzen.dpy, pm, dzen.slave_win.drawable[lnr], dzen.gc,
-					0, 0, px, dzen.line_height, xorig, 0);
+					0, 0, px, dzen.line_height, xorig[LNR2WINDOW(lnr)], 0);
 			XFreePixmap(dzen.dpy, pm);
 			return NULL;
 		}
@@ -742,19 +742,19 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 										sens_areas[sens_areas_cnt].start_y = py;
 										sens_areas[sens_areas_cnt].end_y = py;
 										max_y = py;
-                                        sens_areas[sens_areas_cnt].active = 0;
-                                        sens_areas_cnt++;
+										sens_areas[sens_areas_cnt].window = LNR2WINDOW(lnr);
+										sens_areas[sens_areas_cnt].active = 0;
+										sens_areas_cnt++;
 									}
 								} else {
-                                        /* find most recent unclosed area */
-                                        for(i = sens_areas_cnt - 1; i >= 0; i--)
-                                            if(!sens_areas[i].active)
-                                                break;
-                                        if(i >= 0 && i < MAX_CLICKABLE_AREAS) {
-                                            sens_areas[i].end_x = px;
-                                            sens_areas[i].end_y = max_y;
-                                            sens_areas[i].active = 1;
-
+										/* find most recent unclosed area */
+										for(i = sens_areas_cnt - 1; i >= 0; i--)
+											if(!sens_areas[i].active)
+												break;
+										if(i >= 0 && i < MAX_CLICKABLE_AREAS) {
+											sens_areas[i].end_x = px;
+											sens_areas[i].end_y = max_y;
+											sens_areas[i].active = 1;
 									}
 								}
 							}
@@ -871,14 +871,14 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 
 		} else {
 			if(align == ALIGNLEFT)
-				xorig = 0;
+				xorig[LNR2WINDOW(lnr)] = 0;
 			if(align == ALIGNCENTER) {
-				xorig = (lnr != -1) ?
+				xorig[LNR2WINDOW(lnr)] = (lnr != -1) ?
 					(dzen.slave_win.width - px)/2 :
 					(dzen.title_win.width - px)/2;
 			}
 			else if(align == ALIGNRIGHT) {
-				xorig = (lnr != -1) ?
+				xorig[LNR2WINDOW(lnr)] = (lnr != -1) ?
 					(dzen.slave_win.width - px) :
 					(dzen.title_win.width - px);
 			}
@@ -887,11 +887,11 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 
 		if(lnr != -1) {
 			XCopyArea(dzen.dpy, pm, dzen.slave_win.drawable[lnr], dzen.gc,
-					0, 0, dzen.w, dzen.line_height, xorig, 0);
+                    0, 0, dzen.w, dzen.line_height, xorig[LNR2WINDOW(lnr)], 0);
 		}
 		else {
 			XCopyArea(dzen.dpy, pm, dzen.title_win.drawable, dzen.gc,
-					0, 0, dzen.w, dzen.line_height, xorig, 0);
+					0, 0, dzen.w, dzen.line_height, xorig[LNR2WINDOW(lnr)], 0);
 		}
 		XFreePixmap(dzen.dpy, pm);
 

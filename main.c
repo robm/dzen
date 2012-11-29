@@ -705,8 +705,8 @@ handle_xev(void) {
              for(i=sens_areas_cnt; i>=0; i--) {
 				if(ev.xbutton.window == dzen.title_win.win &&
 						ev.xbutton.button == sens_areas[i].button &&
-						(ev.xbutton.x >=  sens_areas[i].start_x+xorig &&
-						ev.xbutton.x <=  sens_areas[i].end_x+xorig) &&
+						(ev.xbutton.x >=  sens_areas[i].start_x+xorig[sens_areas[i].window] &&
+						ev.xbutton.x <=  sens_areas[i].end_x+xorig[sens_areas[i].window]) &&
 						(ev.xbutton.y >=  sens_areas[i].start_y &&
 						ev.xbutton.y <=  sens_areas[i].end_y) &&
                         sens_areas[i].active) {

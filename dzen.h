@@ -68,11 +68,12 @@ typedef struct _CLICK_A {
 	int end_x;
 	int start_y;
 	int end_y;
+    int window;
 	char cmd[1024];
 } click_a;
 extern click_a sens_areas[MAX_CLICKABLE_AREAS];
 extern int sens_areas_cnt;
-extern int xorig;
+extern int xorig[2]; //0: top window, 1: slave window
 
 
 /* title window */
