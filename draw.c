@@ -420,8 +420,8 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 	else {
 		h = dzen.font.height;
 		py = (dzen.line_height - h) / 2;
-        xorig[LNR2WINDOW(lnr)] = 0;
-
+		xorig[LNR2WINDOW(lnr)] = 0;
+		
 		if(lnr != -1) {
 			pm = XCreatePixmap(dzen.dpy, RootWindow(dzen.dpy, DefaultScreen(dzen.dpy)), dzen.slave_win.width,
 					dzen.line_height, DefaultDepth(dzen.dpy, dzen.screen));
@@ -429,7 +429,6 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 		else {
 			pm = XCreatePixmap(dzen.dpy, RootWindow(dzen.dpy, DefaultScreen(dzen.dpy)), dzen.title_win.width,
 					dzen.line_height, DefaultDepth(dzen.dpy, dzen.screen));
-			sens_areas_cnt = 0;
 		}
 
 #ifdef DZEN_XFT
@@ -1015,6 +1014,7 @@ void
 drawbody(char * text) {
 	char *ec;
 	int i, write_buffer=1;
+	
 
 	if(dzen.slave_win.tcnt == -1) {
 		dzen.slave_win.tcnt = 0;

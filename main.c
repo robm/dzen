@@ -158,6 +158,7 @@ read_stdin(void) {
 	}
 	else {
 		while((n_off = chomp(buf, retbuf, n_off, n))) {
+			sens_areas_cnt = 0;
 			if(!dzen.slave_win.ishmenu
 					&& dzen.tsupdate
 					&& dzen.slave_win.max_lines
