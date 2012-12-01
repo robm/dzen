@@ -31,7 +31,9 @@ typedef struct ICON_C {
 icon_c icons[MAX_ICON_CACHE];
 int icon_cnt;
 int otx;
-int xorig[2]; //0: topwindow, 1: slave window
+
+int xorig[2];
+sens_w window_sens[2];
 
 /* command types for the in-text parser */
 enum ctype  {bg, fg, icon, rect, recto, circle, circleo, pos, abspos, titlewin, ibg, fn, fixpos, ca, ba};
@@ -731,34 +733,36 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 							font_was_set = 1;
 							break;
 						case ca:
+							; //nop to keep gcc happy
+							sens_w *w = &window_sens[LNR2WINDOW(lnr)];
+							
 							if(tval[0]) {
-								if(sens_areas_cnt < MAX_CLICKABLE_AREAS) {
+								click_a *area = &((*w).sens_areas[(*w).sens_areas_cnt]);
+								if((*w).sens_areas_cnt < MAX_CLICKABLE_AREAS) {
 									get_sens_area(tval, 
-											&sens_areas[sens_areas_cnt].button, 
-											sens_areas[sens_areas_cnt].cmd);
-									sens_areas[sens_areas_cnt].start_x = px;
-									sens_areas[sens_areas_cnt].start_y = py;
-									sens_areas[sens_areas_cnt].end_y = py;
+											&(*area).button, 
+											(*area).cmd);
+									(*area).start_x = px;
+									(*area).start_y = py;
+									(*area).end_y = py;
 									max_y = py;
-									sens_areas[sens_areas_cnt].topslave = LNR2WINDOW(lnr);
-									sens_areas[sens_areas_cnt].active = 0;
+									(*area).active = 0;
 									if(lnr == -1) {
-										sens_areas[sens_areas_cnt].win = dzen.title_win.win;
+										(*area).win = dzen.title_win.win;
 									} else {
-										sens_areas[sens_areas_cnt].win = dzen.slave_win.line[lnr];
+										(*area).win = dzen.slave_win.line[lnr];
 									}
-									sens_areas_cnt++;
-									
+									(*w).sens_areas_cnt++;
 								}
 							} else {
-									/* find most recent unclosed area */
-									for(i = sens_areas_cnt - 1; i >= 0; i--)
-										if(!sens_areas[i].active)
+									//find most recent unclosed area
+									for(i = (*w).sens_areas_cnt - 1; i >= 0; i--)
+										if(!(*w).sens_areas[i].active)
 											break;
 									if(i >= 0 && i < MAX_CLICKABLE_AREAS) {
-										sens_areas[i].end_x = px;
-										sens_areas[i].end_y = max_y;
-										sens_areas[i].active = 1;
+										(*w).sens_areas[i].end_x = px;
+										(*w).sens_areas[i].end_y = max_y;
+										(*w).sens_areas[i].active = 1;
 								}
 							}
 							break;
@@ -997,7 +1001,9 @@ drawheader(const char * text) {
 		if (text){
 			dzen.w = dzen.title_win.width;
 			dzen.h = dzen.line_height;
-
+			
+			window_sens[TOPWINDOW].sens_areas_cnt = 0;
+			
 			XFillRectangle(dzen.dpy, dzen.title_win.drawable, dzen.rgc, 0, 0, dzen.w, dzen.h);
 			parse_line(text, -1, dzen.title_win.alignment, 0, 0);
 		}
@@ -1022,14 +1028,9 @@ drawbody(char * text) {
 		return;
 	}
 
+	
 	if((ec = strstr(text, "^tw()")) && (*(ec-1) != '^')) {
-		dzen.w = dzen.title_win.width;
-		dzen.h = dzen.line_height;
-
-		XFillRectangle(dzen.dpy, dzen.title_win.drawable, dzen.rgc, 0, 0, dzen.w, dzen.h);
-		parse_line(ec+5, -1, dzen.title_win.alignment, 0, 0);
-		XCopyArea(dzen.dpy, dzen.title_win.drawable, dzen.title_win.win,
-				dzen.gc, 0, 0, dzen.w, dzen.h, 0, 0);
+		drawheader(ec+5);
 		return;
 	}
 
