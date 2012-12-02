@@ -453,7 +453,7 @@ Interaction:
     ^ca(BTN, CMD) ... ^ca()      
 
                        Used to define 'clickable areas' anywhere inside the
-                       title window. 
+                       title window or slave window. 
                        - 'BTN' denotes the mouse button (1=left, 2=right, 3=middle, etc.) 
                        - 'CMD' denotes the command that should be spawned when the specific
                          area has been clicked with the defined button
