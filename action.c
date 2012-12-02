@@ -440,6 +440,7 @@ a_print(char * opt[]) {
 	if(opt)
 		for(i=0; opt[i]; i++)
 			puts(opt[i]);
+	fflush(stdout);
 	return 0;
 }
 
