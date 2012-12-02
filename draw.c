@@ -155,6 +155,8 @@ setfont(const char *fontstr) {
 	}
 	dzen.font.height = dzen.font.ascent + dzen.font.descent;
 #else
+        if(dzen.font.xftfont)
+           XftFontClose(dzen.dpy, dzen.font.xftfont);
 	dzen.font.xftfont = XftFontOpenXlfd(dzen.dpy, dzen.screen, fontstr);
 	if(!dzen.font.xftfont)
 	   dzen.font.xftfont = XftFontOpenName(dzen.dpy, dzen.screen, fontstr);
