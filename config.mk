@@ -29,8 +29,8 @@ INCS = -I. -I/usr/include -I${X11INC}
 
 
 # Option 3: With Xinerama no XPM
-#LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXinerama
-#CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA
+LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXinerama
+CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA
 
 
 ## Option 4: With Xinerama and XPM
@@ -39,8 +39,8 @@ INCS = -I. -I/usr/include -I${X11INC}
 
 
 ## Option 5: With XFT
-LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 `pkg-config --libs xft`
-CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XFT `pkg-config --cflags xft`
+# LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 `pkg-config --libs xft`
+# CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XFT `pkg-config --cflags xft`
 
 
 ## Option 6: With XPM and XFT

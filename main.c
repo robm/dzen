@@ -218,9 +218,34 @@ x_draw_body(void) {
 }
 
 static void
-x_check_geometry(XRectangle scr) {
+x_check_geometry(Geometry *geometry, XRectangle scr) {
 	TWIN *t = &dzen.title_win;
 	SWIN *s = &dzen.slave_win;
+
+	if(geometry->relative_flags & RELATIVE_X)
+		t->x = s->x = geometry->x * scr.width / 100;
+	else
+		t->x = s->x = geometry->x;
+
+	if(geometry->relative_flags & RELATIVE_Y)
+		t->y = geometry->y * scr.height / 100;
+	else
+		t->y = geometry->y;
+
+	if(geometry->relative_flags & RELATIVE_WIDTH)
+		s->width = geometry->y * scr.height / 100;
+	else
+		s->width = geometry->y;
+
+	if(geometry->relative_flags & RELATIVE_HEIGHT)
+		dzen.line_height = geometry->height * scr.height / 100;
+	else
+		dzen.line_height = geometry->height;
+
+	if(geometry->relative_flags & RELATIVE_TITLE_WIDTH)
+		t->width = geometry->title_width * scr.width / 100;
+	else
+		t->width = geometry->title_width;
 
 	t->x = t->x < 0 ? scr.width  + t->x + scr.x : t->x + scr.x;
 	t->y = t->y < 0 ? scr.height + t->y + scr.y : t->y + scr.y;
@@ -491,7 +516,7 @@ x_read_resources(void) {
 }
 
 static void
-x_create_windows(int use_ewmh_dock) {
+x_create_windows(Geometry *geometry, int use_ewmh_dock) {
 	XSetWindowAttributes wa;
 	Window root;
 	int i;
@@ -519,7 +544,7 @@ x_create_windows(int use_ewmh_dock) {
 #else
 	qsi_no_xinerama(dzen.dpy, &si);
 #endif
-	x_check_geometry(si);
+	x_check_geometry(geometry, si);
 
 	/* title window */
 	dzen.title_win.win = XCreateWindow(dzen.dpy, root,
@@ -895,8 +920,15 @@ main(int argc, char *argv[]) {
 	int i, use_ewmh_dock=0;
 	char *action_string = NULL;
 	char *endptr, *fnpre = NULL;
+	Geometry geometry;
 
 	/* default values */
+	geometry.x = 0;
+	geometry.y = 0;
+	geometry.title_width = geometry.width = 0;
+	geometry.height = 0;
+	geometry.relative_flags = 0;
+
 	dzen.title_win.name = "dzen title";
 	dzen.slave_win.name = "dzen slave";
 	dzen.cur_line  = 0;
@@ -938,17 +970,17 @@ main(int argc, char *argv[]) {
 				t = XParseGeometry(argv[i], &tx, &ty, &tw, &th);
 
 				if(t & XValue)
-					dzen.title_win.x = tx;
+					geometry.x = tx;
 				if(t & YValue) {
-					dzen.title_win.y = ty;
+					geometry.y = ty;
 					if(!ty && (t & YNegative))
 						/* -0 != +0 */
-						dzen.title_win.y = -1;
+						geometry.y = -1;
 				}
 				if(t & WidthValue)
-					dzen.title_win.width = (signed int) tw;
+					geometry.title_width = tw;
 				if(t & HeightValue)
-					dzen.line_height = (signed int) th;
+					geometry.height = th;
 			}
 		}
 		else if(!strncmp(argv[i], "-u", 3)){
@@ -1016,19 +1048,49 @@ main(int argc, char *argv[]) {
 			if(++i < argc) dzen.fg = argv[i];
 		}
 		else if(!strncmp(argv[i], "-x", 3)) {
-			if(++i < argc) dzen.title_win.x = dzen.slave_win.x = atoi(argv[i]);
+			if(++i < argc) {
+				geometry.x = atoi(argv[i]);
+				if(strchr(argv[i], '%'))
+					geometry.relative_flags |= RELATIVE_X;
+				else
+					geometry.relative_flags &= ~RELATIVE_X;
+			}
 		}
 		else if(!strncmp(argv[i], "-y", 3)) {
-			if(++i < argc) dzen.title_win.y = atoi(argv[i]);
+			if(++i < argc) {
+				geometry.y = atoi(argv[i]);
+				if(strchr(argv[i], '%'))
+					geometry.relative_flags |= RELATIVE_Y;
+				else
+					geometry.relative_flags &= ~RELATIVE_Y;
+			}
 		}
 		else if(!strncmp(argv[i], "-w", 3)) {
-			if(++i < argc) dzen.slave_win.width = atoi(argv[i]);
+			if(++i < argc) {
+				geometry.width = atoi(argv[i]);
+				if(strchr(argv[i], '%'))
+					geometry.relative_flags |= RELATIVE_WIDTH;
+				else
+					geometry.relative_flags &= ~RELATIVE_WIDTH;
+			}
 		}
 		else if(!strncmp(argv[i], "-h", 3)) {
-			if(++i < argc) dzen.line_height= atoi(argv[i]);
+			if(++i < argc) {
+				geometry.height = atoi(argv[i]);
+				if(strchr(argv[i], '%'))
+					geometry.relative_flags |= RELATIVE_HEIGHT;
+				else
+					geometry.relative_flags &= ~RELATIVE_HEIGHT;
+			}
 		}
 		else if(!strncmp(argv[i], "-tw", 4)) {
-			if(++i < argc) dzen.title_win.width = atoi(argv[i]);
+			if(++i < argc) {
+				geometry.title_width = atoi(argv[i]);
+				if(strchr(argv[i], '%'))
+					geometry.relative_flags |= RELATIVE_TITLE_WIDTH;
+				else
+					geometry.relative_flags &= ~RELATIVE_TITLE_WIDTH;
+			}
 		}
 		else if(!strncmp(argv[i], "-fn-preload", 12)) {
 			if(++i < argc) {
@@ -1061,7 +1123,8 @@ main(int argc, char *argv[]) {
 		}
 		else
 			eprint("usage: dzen2 [-v] [-p [seconds]] [-m [v|h]] [-ta <l|c|r>] [-sa <l|c|r>]\n"
-                   "             [-x <pixel>] [-y <pixel>] [-w <pixel>] [-h <pixel>] [-tw <pixel>] [-u]\n"
+                                   "             [-x <pixel|percent%>] [-y <pixel|percent%>] [-w <pixel|percent%>]\n"
+                                   "             [-h <pixel|percent%>] [-tw <pixel|percent%>] [-u]\n"
 				   "             [-e <string>] [-l <lines>]  [-fn <font>] [-bg <color>] [-fg <color>]\n"
 				   "             [-geometry <geometry string>] [-expand <left|right>] [-dock]\n"
 				   "             [-title-name <string>] [-slave-name <string>]\n"
@@ -1073,8 +1136,11 @@ main(int argc, char *argv[]) {
 	if(dzen.tsupdate && !dzen.slave_win.max_lines)
 		dzen.tsupdate = False;
 
-	if(!dzen.title_win.width)
-		dzen.title_win.width = dzen.slave_win.width;
+	if (!geometry.title_width) {
+		geometry.title_width = geometry.width;
+		if (geometry.relative_flags & RELATIVE_WIDTH)
+			geometry.relative_flags |= RELATIVE_TITLE_WIDTH;
+	}
 
 	if(!setlocale(LC_ALL, "") || !XSupportsLocale())
 		puts("dzen: locale not available, expect problems with fonts.\n");
@@ -1125,7 +1191,7 @@ main(int argc, char *argv[]) {
 		dzen.slave_win.max_lines = 1;
 
 
-	x_create_windows(use_ewmh_dock);
+	x_create_windows(&geometry, use_ewmh_dock);
 
 	if(!dzen.slave_win.ishmenu)
 		x_map_window(dzen.title_win.win);
