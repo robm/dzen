@@ -109,8 +109,8 @@ chomp(char *inbuf, char *outbuf, int start, int len) {
 		rem = NULL;
 	}
 	while(off < len) {
-		if(i > MAX_LINE_LEN) {
-			outbuf[i] = '\0';
+		if(i >= MAX_LINE_LEN) {
+			outbuf[MAX_LINE_LEN-1] = '\0';
 			return ++off;
 		}
 		if(inbuf[off] != '\n') {
