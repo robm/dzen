@@ -78,7 +78,7 @@ dzen accepts a couple of options:
     -fn     font 
     -ta     alignement of title window content 
             l(eft), c(center), r(ight)
-    -tw     title window width
+    -tw     title window width (can be relative with %)
     -sa     alignment of slave window, see "-ta"
     -l      lines,  ^fg(#6fbf47)see (1)
     -e      events and actions, ^fg(#6fbf47)see (2)
@@ -86,10 +86,10 @@ dzen accepts a couple of options:
     -u      update contents of title and 
             slave window simultaneously, ^fg(#6fbf47)see (4)
     -p      persist EOF (optional timeout in seconds)
-    -x      x position
-    -y      y position
-    -h      line height (default: fontheight + 2 pixels)
-    -w      width
+    -x      x position (can be relative with %)
+    -y      y position (can be relative with %)
+    -h      line height (default: fontheight + 2 pixels) (can be relative with %)
+    -w      width (can be relative with %)
     -xs     number of Xinerama screen
     -v      version information
 
