@@ -39,8 +39,8 @@ CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA
 
 
 ## Option 5: With XFT
-# LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 `pkg-config --libs xft`
-# CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XFT `pkg-config --cflags xft`
+#LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 `pkg-config --libs xft`
+#CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XFT `pkg-config --cflags xft`
 
 
 ## Option 6: With XPM and XFT
@@ -48,7 +48,12 @@ CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA
 #CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XPM -DDZEN_XFT `pkg-config --cflags xft`
 
 
-## Option 7: With Xinerama and XPM and XFT
+## Option 7: With Xinerama and XFT
+#LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXinerama `pkg-config --libs xft`
+#CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA -DDZEN_XFT `pkg-config --cflags xft`
+
+
+## Option 8: With Xinerama and XPM and XFT
 #LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXinerama -lXpm `pkg-config --libs xft`
 #CFLAGS = -Wall -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA -DDZEN_XPM -DDZEN_XFT `pkg-config --cflags xft`
 
