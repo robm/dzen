@@ -39,16 +39,29 @@
 # define Button7 7
 #endif
 
+#define RELATIVE_X 0x1
+#define RELATIVE_Y 0x2
+#define RELATIVE_WIDTH 0x4
+#define RELATIVE_HEIGHT 0x8
+#define RELATIVE_TITLE_WIDTH 0x10
+
 enum { ColFG, ColBG, ColLast };
 
 /* exapansion directions */
 enum { noexpand, left, right, both };
 
 typedef struct DZEN Dzen;
+typedef struct Geometry Geometry;
 typedef struct Fnt Fnt;
 typedef struct TW TWIN;
 typedef struct SW SWIN;
 typedef struct _Sline Sline;
+
+struct Geometry {
+	short x, y;
+	unsigned short title_width, width, height;
+	unsigned char relative_flags;
+};
 
 struct Fnt {
 	XFontStruct *xfont;
