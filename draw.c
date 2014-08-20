@@ -642,11 +642,12 @@ parse_line(const char *line, int lnr, int align, int reverse, int nodraw) {
 									}
 								} else
 									set_posy=1;
-
-								if(r != 2)
-									px = px+n_posx<0? 0 : px + n_posx;
-								if(r != 1) 
-									py += n_posy;
+                                if (r != 5) {
+                                  if(r != 2)
+                                    px = px+n_posx<0? 0 : px + n_posx;
+                                  if(r != 1)
+                                    py += n_posy;
+                                }
 							} else {
 								set_posy = 0;
 								py = (dzen.line_height - dzen.font.height) / 2;
