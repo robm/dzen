@@ -48,9 +48,12 @@ install: all
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
 	@cp -f dzen2 ${DESTDIR}${PREFIX}/bin
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/dzen2
+	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
+	@cp -f dzen2.1 ${DESTDIR}${MANPREFIX}/man1/dzen2.1
 
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
 	@rm -f ${DESTDIR}${PREFIX}/bin/dzen2
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/dzen2.1
 
 .PHONY: all options clean dist install uninstall
