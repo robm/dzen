@@ -1,0 +1,63 @@
+.TH "DBAR" 1 "Jan 01 2008"
+.SH NAME
+dbar \- simple gadget that you can use in combination with dzen to display a progressbar.
+.SH SYNOPSIS
+.HP 7
+\fBdbar\fR [\-w \fIcharacters\fR] [\-s \fIsymbol\fR] [\-min \fIminvalue\fR] [\-max \fImaxvalue\fR] [\-l \fIstring\fR] [\-nonl]
+.SH DESCRIPTION
+.B dbar
+is an application that generates semi graphical progress meters, from some values you supply to it.
+.PP
+See the usage examples for a description of the expected input format.
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-max
+Value to be considered 100% (default: 100)
+.TP
+.B \-min
+Value to be considered 0% (default: 0)
+.TP
+.B \-w
+Number of charcaters to be considered 100% in the bar  (default: 25 )
+.TP
+.B \-s
+Symbol represeting the percentage value in the bar (default: =  )
+.TP
+.B \-l
+label to be prepended to the bar (default: '' )
+.TP
+.B \-nonl
+no new line, don't put '\n' at the end of the bar    (default: do print '\n')
+.SH USAGE EXAMPLES
+.TP
+.B Static 0% and 100% mark or single value input:
+.IP
+Command: echo 25 | dbar \-m 100 \-l Sometext
+.br
+Output: Sometext  25% [======                   ]
+.TP
+.B If your 100% mark changes dynamically or 2-values input:
+.IP
+Command: echo "50 150" | dbar
+.br
+Output: 33% [========                 ]
+.TP
+.B If your value range is not between [0, maxval] or 3-values input:
+.IP
+Command: echo "50 \-25 150" | dbar
+.br
+Output: 43% [===========              ]
+.PP
+.SH AUTHOR
+.B Dbar
+was written by Robert Manea.
+.PP
+This manual page was written by bertagaz <bertagaz@ptitcanardnoir.org>,
+for the Debian project (but may be used by others).
+.SH SEE ALSO
+.BR dzen2 (1),
+.BR gcpubar (1),
+.BR gdbar (1),
+and
+.BR textwidth (1).

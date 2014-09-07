@@ -1,0 +1,59 @@
+.TH "GDBAR" 1 "Jan 01 2008"
+.SH NAME
+gdbar \- generates fully graphical progress meters
+.SH SYNOPSIS
+.HP 7
+\fBgdbar\fR [\-w \fIcharacters\fR] [\-s \fIsymbol\fR] [\-fg \fIcolor\fR] [\-bg \fIcolor\fR] [\-min \fIminvalue\fR] [\-max \fImaxvalue\fR] [\-l \fIstring\fR] [\-nonl] [\-o]
+.SH DESCRIPTION
+.B gdbar
+application that generates fully graphical progress meters, from some values you supply to it.
+.PP
+It has the same input semantics as dbar (see 
+.B dbar (1)
+\). In contrast to dbar, gdbar draws fully graphical meters which are only useful in combination with dzen.
+.PP
+See the usage examples for a description of the expected input format.
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-max
+Value to be considered 100% (default: 100)
+.TP
+.B \-min
+Value to be considered 0% (default: 0)
+.TP
+.B \-fg
+Foreground color. (default white)
+.TP
+.B \-bg
+Bacground color (default darkgrey)
+.TP
+.B \-w
+Size in pixels to be considered 100% in the bar  (default: 80 )
+.TP
+.B \-h
+Bar height.
+.TP
+.B \-l
+label to be prepended to the bar (default: '' )
+.TP
+.B \-o
+Draw conky style meters.
+.TP
+.B \-nonl
+no new line, don't put '\n' at the end of the bar (default: do
+print '\n')
+
+.SH AUTHOR
+.B Dbar
+was written by Robert Manea.
+.PP
+This manual page was written by bertagaz <bertagaz@ptitcanardnoir.org>,
+for the Debian project (but may be used by others).
+
+.SH SEE ALSO
+.BR dzen2 (1),
+.BR dbar (1),
+.BR gcpubar (1),
+and
+.BR textwidth (1).

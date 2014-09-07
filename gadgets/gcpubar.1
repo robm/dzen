@@ -1,0 +1,44 @@
+.TH "GCPUBAR" 1 "Jan 01 2008"
+.SH NAME
+gcpubar \- graphical CPU usage meter
+.SH SYNOPSIS
+.HP 7
+\fBgcpubar\fR [\-i \fIinterval\fR] [\-c \fIcount\fR] [\-fg \fIcolor\fR] [\-bg \fIcolor\fR] [\-w \fIpixel\fR] [\-h\ \fIpixel\fR] [\-nonl]
+.SH DESCRIPTION
+.B gcpubar
+is a CPU utilization meter for Linux. It relies on the existence of the /proc/stat file and generates fully graphical meters viewable with dzen.
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-i
+Update interval in seconds (default 1). You can use positive values less than 1 for intervals shorter than 1 second.
+.TP
+.B \-c
+Terminate after displaying argument to this option (default infinite).
+.TP
+.B \-fg
+Foreground color
+.TP
+.B \-bg
+Background color
+.TP
+.B \-w
+Width in piwels
+.TP
+.B \-h
+Height in pixels
+.TP
+.B \-nonl
+No new line, don't put '\\n' at the end of the bar (default: do print '\\n')
+.SH AUTHOR
+.B gcpubar
+was written by Robert Manea.
+.PP
+This manual page was written by bertagaz <bertagaz@ptitcanardnoir.org>,
+for the Debian project (but may be used by others).
+.SH SEE ALSO
+.BR dzen2 (1),
+.BR dbar (1),
+.BR gdbar (1),
+and
+.BR textwidth (1).

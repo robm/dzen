@@ -1,0 +1,95 @@
+.TH DZEN 1
+.SH NAME
+dzen2 \- general-purpose messaging and notification for X11
+.SH SYNOPSIS
+.B dzen2
+[\-v] [\-p [seconds]] [\-m [v|h]] [\-ta <l|c|r>] [\-sa <l|c|r>]
+      [\-x <pixel>] [\-y <pixel>] [\-w <pixel>] [\-tw <pixel>] [\-u] 
+      [\-e <string>] [\-l <lines>]  [\-fn <font>] [\-bg <color>]
+      [\-fg <color>] [\-xs <screen>]
+.SH DESCRIPTION
+.B Dzen
+is a general\-purpose messaging and notification program for X11,
+desigend to be scriptable in any language and integrate well with
+window managers like dwm, wmii and xmonad though it will work with any
+windowmanger.
+.PP
+.B Dzen
+expects the status message on its standard input, and uses a custom
+formatting language for colors and several other features (like bar
+meters and such). See README for detailed usage and scripting
+instructions.
+.SH OPTIONS
+.TP
+.B \-fg <color>
+Set foreground color. The <color> can be specified either as symbolic
+name (e.g. red, darkgreen, etc.) or as #rrggbb hex\-value
+(e.g. #ffffaa).
+.TP
+.B \-bg <color>
+Set background color (same format as \-fg).
+.TP
+.B \-fn <font>
+Set font (using the format of xlsfonts and xfontsel).
+.TP
+.B \-ta <l|c|r>
+Set alignement of title window content: l(eft), c(center) or r(ight).
+.TP
+.B \-tw <pixels>
+Set title window width.
+.TP
+.B \-sa <l|c|r>
+Set alignment of slave window (see
+.B \-ta
+).
+.TP
+.B \-l <lines>
+Number of lines to display in slave window (see (1) in README).
+.TP
+.B \-e <event1=action1:option1:...,action2;event2=...>
+Set up events and actions, eg. responses to mouse clicks (see (2) in README).
+.TP
+.B \-m
+Start up in menu mode (see (3) in README).
+.TP
+.B \-u
+Update contents of title and slave window simultaneously, see (see (4) in README).
+.TP
+.B \-p [<timeout>]
+Persist EOF (optional timeout in seconds).
+.TP
+.B \-x <pixels>
+Set x position on the screen.
+.TP
+.B \-y <pixels>
+Set y position on the screen.
+.TP
+.B \-h <pixels>
+Set line height (defaults to fontheight + 2 pixels).
+.TP
+.B \-w <pixels>
+width
+.TP
+.B \-xs <n>
+Set the Xinerama screen number where dzen should appear.
+.TP
+.B \-v
+Display version information.
+
+.SH AUTHOR
+.B Dzen2
+has been written by
+.B Robert Manea.
+This manpage has been written, based on dzen documentation, by Petr
+Ročkai, for Debian GNU/Linux, but may be used by others. This manpage
+falls under the same licence as Dzen2 itself, see 
+/usr/share/doc/dzen2/copyright.
+
+.SH SEE ALSO
+.BR dbar (1),
+.BR gcpubar (1),
+.BR gdbar (1),
+and
+.BR textwidth (1).
+More detailed documentation (especially on the formatting language of
+dzen2) is available in /usr/share/doc/dzen2/README.gz.
