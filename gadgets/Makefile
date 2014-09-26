@@ -13,7 +13,7 @@ options:
 	@echo "CFLAGS   = ${CFLAGS}"
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CC       = ${CC}"
-	@echo "LD       = ${LD}"
+#	@echo "LD       = ${LD}"
 
 .c.o:
 	@echo CC $<
@@ -61,6 +61,12 @@ install: all
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/gcpubar
 	@cp -f textwidth ${DESTDIR}${PREFIX}/bin
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/textwidth
+	@echo install man pages to ${DESTDIR}${MANPREFIX}/man1
+	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
+	@cp -f dbar.1 ${DESTDIR}${MANPREFIX}/man1/dbar.1
+	@cp -f gdbar.1 ${DESTDIR}${MANPREFIX}/man1/gdbar.1
+	@cp -f gcpubar.1 ${DESTDIR}${MANPREFIX}/man1/gcpubar.1
+	@cp -f textwidth.1 ${DESTDIR}${MANPREFIX}/man1/textwidth.1
 
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
@@ -68,5 +74,10 @@ uninstall:
 	@rm -f ${DESTDIR}${PREFIX}/bin/gdbar
 	@rm -f ${DESTDIR}${PREFIX}/bin/gcpubar
 	@rm -f ${DESTDIR}${PREFIX}/bin/textwidth
+	@echo removing man pages from ${DESTDIR}${MANPREFIX}/man1
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/dbar.1
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/gdbar.1
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/gcpubar.1
+	@rm -f ${DESTDIR}${MANPREFIX}/man1/textwidth.1
 
 .PHONY: all options clean install uninstall
