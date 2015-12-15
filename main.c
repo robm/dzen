@@ -530,7 +530,7 @@ x_create_windows(int use_ewmh_dock) {
 	/* set class property */
 	class_hint = XAllocClassHint();
 	class_hint->res_name  = "dzen2";
-	class_hint->res_class = "dzen";
+	class_hint->res_class = "Dzen";
 	XSetClassHint(dzen.dpy, dzen.title_win.win, class_hint);
 	XFree(class_hint);
 
