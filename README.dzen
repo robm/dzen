@@ -76,7 +76,7 @@ dzen accepts a couple of options:
     -fg     foreground color
     -bg     background color
     -fn     font 
-    -ta     alignement of title window content 
+    -ta     alignment of title window content 
             l(eft), c(center), r(ight)
     -tw     title window width
     -sa     alignment of slave window, see "-ta"
@@ -130,7 +130,7 @@ Dzen's window layout is as follows:
 
 The first line you provide to dzen always goes to the title window, 
 all other consecutive lines will be drawn to the slave window unless
-you explicitly overide this with the ^fg(#6fbf47)(5) In-text formating language
+you explicitly override this with the ^fg(#6fbf47)(5) In-text formating language
 ^fg()command ^^tw().
 
 
@@ -151,7 +151,7 @@ A2:  With the default event/action handling the slave window will
      this.
 
 
-Q3:  If I echo some text or cat a file dzen closes itself imediatelly.
+Q3:  If I echo some text or cat a file dzen closes itself immediately.
 
 A3:  There are 2 different approaches dzen uses to terminate itself, 
      see next section ^fg(#6fbf47)Termination^fg().
@@ -161,10 +161,10 @@ Q4:  Ok, the title and slave thing works, can I update the
      contents of both windows at the same time?
 
 A4:  Sure, see ^fg(#6fbf47)(4) Simultaneous updates ^fg()or use the in-text 
-     command ^^tw() to explicitly draw to the title windwow.
+     command ^^tw() to explicitly draw to the title window.
      See ^fg(#6fbf47)(5) In-Text formating language ^fg()for further details
 
-Q5:  Can i chnage color of my input at runtime?
+Q5:  Can I change color of my input at runtime?
 
 A5:  Yes, you can change both background and foreground colors and 
      much more See ^fg(#6fbf47)(5) In-Text formating language^fg().
@@ -196,7 +196,7 @@ dzen uses two different approaches to terminate itself:
 ^fg(#6fbf47)Return values:
 ^fg(#6fbf47)--------------
 0               -   dzen received EOF
-1               -   some error occured, inspect the error message
+1               -   some error occurred, inspect the error message
 user defined    -   set with 'exit:retval' action, ^fg(#6fbf47)see (2)
 
 
@@ -227,7 +227,7 @@ The command line syntax is as follows:
 -e 'event1=action1:option1:...option<n>,...,action<m>;...;event<l>'
 
 Every event can take any number of actions and every action can take any number
-of options. (By default limited to 64 each, easily changable in action.h)
+of options. (By default limited to 64 each, easily changeable in action.h)
 
 An example:
 ^fg(grey70)    -e 'button1=exec:xterm:firefox;entertitle=uncollapse,unhide;button3=exit'
@@ -506,10 +506,10 @@ Some examples:
 
 
    Input for icons:
-          ^^i(bitmaps/envelope.xbm) I am an envelope ^^fg(yellow)and ^^i(bitmaps/battery.xbm) I'm a baterry.
+          ^^i(bitmaps/envelope.xbm) I am an envelope ^^fg(yellow)and ^^i(bitmaps/battery.xbm) I'm a battery.
 
    Resulting in:
-          ^i(bitmaps/envelope.xbm) I am an envelope ^fg(yellow)and ^i(bitmaps/battery.xbm) I'm a baterry.
+          ^i(bitmaps/envelope.xbm) I am an envelope ^fg(yellow)and ^i(bitmaps/battery.xbm) I'm a battery.
 
 
    Input for rectangles:
