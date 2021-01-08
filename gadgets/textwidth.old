@@ -27,9 +27,6 @@ THE SOFTWARE.
 #include<stdlib.h>
 #include<string.h>
 #include<X11/Xlib.h>
-#ifdef DZEN_XFT
-#include<X11/Xft/Xft.h>
-#endif
 
 typedef struct _Fnt {
 	XFontStruct *xfont;
@@ -37,11 +34,6 @@ typedef struct _Fnt {
 	int ascent;
 	int descent;
 	int height;
-#ifdef DZEN_XFT
-	XftFont *xftfont;
-	XGlyphInfo *extents;
-	int width;
-#endif
 } Fnt;
 
 Fnt font;
@@ -50,25 +42,19 @@ Display *dpy;
 unsigned int
 textw(const char *text, unsigned int len) {
 	XRectangle r;
-#ifndef DZEN_XFT
+
 	if(font.set) {
 		XmbTextExtents(font.set, text, len, NULL, &r);
 		return r.width;
 	}
 	return XTextWidth(font.xfont, text, len);
-#else
-	XftTextExtentsUtf8(dpy, font.xftfont, (unsigned const char *) text, strlen(text), font.extents);
-	if(font.extents->height > font.height)
-		font.height = font.extents->height;
-	return font.extents->xOff;
-#endif
 }
 
 void
 setfont(const char *fontstr) {
-#ifndef DZEN_XFT
 	char *def, **missing;
 	int i, n;
+
 	missing = NULL;
 	if(font.set)
 		XFreeFontSet(dpy, font.set);
@@ -102,21 +88,6 @@ setfont(const char *fontstr) {
 		font.descent = font.xfont->descent;
 	}
 	font.height = font.ascent + font.descent;
-#else
-	if(font.xftfont)
-		XftFontClose(dpy, font.xftfont);
-	font.xftfont = XftFontOpenXlfd(dpy, DefaultScreen(dpy), fontstr);
-	if(!font.xftfont)
-		font.xftfont = XftFontOpenName(dpy, DefaultScreen(dpy), fontstr);
-	if(!font.xftfont) {
-		fprintf(stderr, "error, cannot load font: '%s'\n", fontstr);
-		exit(EXIT_FAILURE);
-	}
-	font.extents = malloc(sizeof(XGlyphInfo));
-	XftTextExtentsUtf8(dpy, font.xftfont, (unsigned const char *) fontstr, strlen(fontstr), font.extents);
-	font.height = font.xftfont->ascent + font.xftfont->descent;
-	font.width = (font.extents->width)/strlen(fontstr);
-#endif
 }
 
 int
