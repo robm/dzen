@@ -390,9 +390,9 @@ a_hide(char * opt[]) {
 	printf("n:%d\n", n);
 	if(!dzen.title_win.ishidden) {
 		if(!dzen.slave_win.ishmenu)
-			XResizeWindow(dzen.dpy, dzen.title_win.win, dzen.title_win.width, 1);
+			XUnmapWindow(dzen.dpy, dzen.title_win.win);
 		else
-			XResizeWindow(dzen.dpy, dzen.slave_win.win, dzen.title_win.width, 1);
+			XUnmapWindow(dzen.dpy, dzen.slave_win.win);
 
 		dzen.title_win.ishidden = True;
 	}
@@ -404,9 +404,9 @@ a_unhide(char * opt[]) {
 	(void)opt;
 	if(dzen.title_win.ishidden) {
 		if(!dzen.slave_win.ishmenu)
-			XResizeWindow(dzen.dpy, dzen.title_win.win, dzen.title_win.width, dzen.line_height);
+			XMapWindow(dzen.dpy, dzen.title_win.win);
 		else
-			XResizeWindow(dzen.dpy, dzen.slave_win.win, dzen.title_win.width, dzen.line_height);
+			XMapWindow(dzen.dpy, dzen.slave_win.win);
 
 		dzen.title_win.ishidden = False;
 	}
